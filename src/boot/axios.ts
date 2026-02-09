@@ -1,5 +1,6 @@
 import { defineBoot } from '#q-app/wrappers';
 import axios, { type AxiosInstance } from 'axios';
+import type { IResponse } from 'src/types/IResponse';
 
 declare module 'vue' {
   interface ComponentCustomProperties {
@@ -14,7 +15,7 @@ declare module 'vue' {
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({ baseURL: 'https://api.example.com' });
+const api = axios.create({ baseURL: process.env.API_URL });
 
 export default defineBoot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -28,4 +29,46 @@ export default defineBoot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { api };
+const make = async <T, R = unknown>(
+    endpoint: string,
+    method: 'POST' | 'GET' | 'PUT' | 'DELETE',
+    params?: R
+) => {
+
+    try {
+        const methods = {
+            POST: async () => {
+                return await api.post(endpoint, params);
+            },
+            PUT: async () => {
+                return await api.put(endpoint, params);
+            },
+            DELETE: async () => {
+                return await api.delete(endpoint);
+            },
+            GET: async () => {
+                return await api.get(endpoint, { params: params });
+            },
+        };
+        const request = await methods[method]();
+        const response = {
+            data: { ...request?.data } as IResponse<T>,
+            status: request?.status,
+        };
+
+        if (response.data.reauth) {
+            window.location.href = '/auth';
+        }
+
+        return response;
+    } catch (e) {
+        return {
+            data: {
+                error: true,
+                message: e,
+            } as IResponse<T>,
+        };
+    }
+};
+
+export { api, make };

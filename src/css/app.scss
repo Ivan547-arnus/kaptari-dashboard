@@ -1,1 +1,121 @@
-// app global css in SCSS form
+@font-face {
+  font-family: comfortaa-bold;
+  src: url("./fonts/comfortaa/Comfortaa-Bold.ttf");
+}
+
+.comfortaa-bold {
+  font-family: comfortaa-bold;
+}
+
+@font-face {
+  font-family: be-vietnam-pro-bold;
+  src: url("./fonts/be-vietnam-pro/BeVietnamPro-Bold.ttf");
+}
+
+.be-vietnam-pro-bold {
+  font-family: be-vietnam-pro-bold;
+}
+
+@font-face {
+  font-family: be-vietnam-pro-thin;
+  src: url("./fonts/be-vietnam-pro/BeVietnamPro-Thin.ttf");
+}
+
+@font-face {
+  font-family: be-vietnam-pro-regular;
+  src: url("./fonts/be-vietnam-pro/BeVietnamPro-Regular.ttf");
+}
+
+.q-field--with-bottom {
+  padding-bottom: 0;
+
+  &.q-field--error {
+    padding-bottom: 0.8em;
+  }
+}
+
+.q-field__bottom {
+  padding: 4px 8px;
+}
+
+.be-vietnam-pro-thin {
+  font-family: be-vietnam-pro-thin;
+}
+
+.button {
+  font-family: be-vietnam-pro-bold;
+}
+
+.border-md-radius {
+  border-radius: 12px;
+}
+
+.border-lg-radius {
+  border-radius: 20px;
+}
+
+.border-xl-radius {
+  border-radius: 30px;
+}
+
+.text-title {
+  font-family: comfortaa-bold;
+}
+
+.text-h1 {
+  font-size: 40px;
+  font-family: comfortaa-bold;
+  font-weight: bold;
+}
+
+.text-h2 {
+  font-size: 32px;
+  font-family: comfortaa-bold;
+  font-weight: bold;
+}
+
+.text-h3 {
+  font-size: 24px;
+  font-family: comfortaa-bold;
+  font-weight: bold;
+}
+
+.text-h4 {
+  font-size: 20px;
+  font-family: comfortaa-bold;
+  font-weight: bold;
+}
+
+.text-h5 {
+  font-size: 16px;
+  font-family: comfortaa-bold;
+  font-weight: bold;
+}
+
+.text-h6 {
+  font-size: 12px;
+  font-family: comfortaa-bold;
+  font-weight: bold;
+}
+
+.q-field__control {
+  border-radius: 12px !important;
+}
+
+.q-field__label {
+  font-family: be-vietnam-pro-bold !important;
+}
+
+.q-field__native {
+  font-family: be-vietnam-pro-regular !important;
+}
+
+.q-item__label {
+  font-family: be-vietnam-pro-bold !important;
+}
+
+
+// No se por que standout se pone negro, pero con esto se arreglo
+.q-field--standout.q-field--highlighted .q-field__control {
+    background-color: $grey-3 !important;
+}
