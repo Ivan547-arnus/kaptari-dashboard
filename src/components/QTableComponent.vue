@@ -189,7 +189,7 @@ onMounted(async () => {
     border: none;
     background-color: $primary !important;
     color: $secondary !important;
-
+    font-size: 1 !important;
   }
 
   th:first-child {

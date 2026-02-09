@@ -6,7 +6,7 @@
     </template>
     <template #list="scope">
       <div class="q-uploader-container" :class="`bg-${$props.color || 'white'}`">
-        <div class="q-uploader-card" v-if="scope.files.length || model?.id">
+        <div class="q-uploader-card text-normal" v-if="scope.files.length || model?.id">
           <img  :src="fileRoute" v-if="isImage && fileRoute" class="border-md-radius"
             style="max-height: 60px;" />
 

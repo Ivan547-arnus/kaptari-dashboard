@@ -26,6 +26,10 @@
   src: url("./fonts/be-vietnam-pro/BeVietnamPro-Regular.ttf");
 }
 
+body {
+  font-family: be-vietnam-pro-regular;
+}
+
 .q-field--with-bottom {
   padding-bottom: 0;
 
@@ -88,14 +92,20 @@
 
 .text-h5 {
   font-size: 16px;
-  font-family: comfortaa-bold;
+  font-family: be-vietnam-pro-bold;
   font-weight: bold;
 }
 
 .text-h6 {
-  font-size: 12px;
-  font-family: comfortaa-bold;
+  font-size: 14px;
+  font-family: be-vietnam-pro-bold;
   font-weight: bold;
+}
+
+
+.text-normal {
+  font-family: be-vietnam-pro-regular;
+  font-size: 14px;
 }
 
 .q-field__control {
@@ -109,11 +119,6 @@
 .q-field__native {
   font-family: be-vietnam-pro-regular !important;
 }
-
-.q-item__label {
-  font-family: be-vietnam-pro-bold !important;
-}
-
 
 // No se por que standout se pone negro, pero con esto se arreglo
 .q-field--standout.q-field--highlighted .q-field__control {

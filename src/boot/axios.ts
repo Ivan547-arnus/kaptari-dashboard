@@ -1,8 +1,8 @@
-import { defineBoot } from '#q-app/wrappers';
-import axios, { type AxiosInstance } from 'axios';
-import type { IResponse } from 'src/types/IResponse';
+import { defineBoot } from "#q-app/wrappers";
+import axios, { type AxiosInstance } from "axios";
+import type { IResponse } from "src/types/IResponse";
 
-declare module 'vue' {
+declare module "vue" {
   interface ComponentCustomProperties {
     $axios: AxiosInstance;
     $api: AxiosInstance;
@@ -30,45 +30,54 @@ export default defineBoot(({ app }) => {
 });
 
 const make = async <T, R = unknown>(
-    endpoint: string,
-    method: 'POST' | 'GET' | 'PUT' | 'DELETE',
-    params?: R
+  endpoint: string,
+  method: "POST" | "GET" | "PUT" | "DELETE",
+  params?: R,
 ) => {
+  try {
+    const methods = {
+      POST: async () => {
+        return await api.post(endpoint, params);
+      },
+      PUT: async () => {
+        return await api.put(endpoint, params);
+      },
+      DELETE: async () => {
+        return await api.delete(endpoint);
+      },
+      GET: async () => {
+        return await api.get(endpoint, { params: params });
+      },
+    };
+    const request = await methods[method]();
+    const response = {
+      data: { ...request?.data } as IResponse<T>,
+      status: request?.status,
+    };
 
-    try {
-        const methods = {
-            POST: async () => {
-                return await api.post(endpoint, params);
-            },
-            PUT: async () => {
-                return await api.put(endpoint, params);
-            },
-            DELETE: async () => {
-                return await api.delete(endpoint);
-            },
-            GET: async () => {
-                return await api.get(endpoint, { params: params });
-            },
-        };
-        const request = await methods[method]();
-        const response = {
-            data: { ...request?.data } as IResponse<T>,
-            status: request?.status,
-        };
-
-        if (response.data.reauth) {
-            window.location.href = '/auth';
-        }
-
-        return response;
-    } catch (e) {
-        return {
-            data: {
-                error: true,
-                message: e,
-            } as IResponse<T>,
-        };
+    if (response.data.reauth) {
+      window.location.href = "/auth";
     }
+
+    return response;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      return {
+        data: {
+          error: true,
+          message: e.response?.data.message || "Hubo un error al conectarse con el servidor",
+          exception: e.message,
+        } as IResponse<T>,
+      };
+    }
+    return {
+      data: {
+        error: true,
+        message: "Hubo un error al conectarse con el servidor",
+        exception: e,
+      } as IResponse<T>,
+    };
+  }
 };
 
 export { api, make };

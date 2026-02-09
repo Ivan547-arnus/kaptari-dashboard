@@ -10,42 +10,51 @@
       <div class="col-12">
         <q-form class="row q-col-gutter-md" id="kaptie-form" @submit.prevent="onSubmit">
           <div class="col-12 col-md-4">
-            <q-card v-bind="$theme.card">
-              <q-card-section>
-                <p class="text-h4 text-primary q-my-none">Información general del kaptie</p>
-                <q-input v-bind="$theme.input" :rules="[$rules.required('Campo requerido')]" label="Título"
-                  class="q-mb-md" v-model="state.title"></q-input>
-                <q-input v-bind="$theme.input" type="textarea" rows="6" :rules="[$rules.required('Campo requerido')]"
-                  label="Descripción" class="q-mb-md" v-model="state.description"></q-input>
-              </q-card-section>
-            </q-card>
-            <div class="column" v-if="state.qr_code">
-              <q-btn v-bind="$theme.btn" class="q-mt-md" color="primary" text-color="secondary" icon="bi-arrow-clockwise"
-                @click="handleRegenerateQR" label="Regenerar QR"></q-btn>
-              <q-btn v-bind="$theme.btn" class="q-mt-md" color="accent" text-color="primary" label="Abrir QR" icon="bi-box-arrow-up-right"
-                :href="$filters.imageUrl(state.qr_code.uuid)" target="_blank"></q-btn>
+            <div class="row q-col-gutter-md">
+              <div :class="{
+                'col-12 col-sm-8 col-md-12': state.qr_code,
+                'col-12': !state.qr_code
+              }"><q-card v-bind="$theme.card">
+                  <q-card-section>
+                    <p class="text-h4 text-primary q-my-none">Información general del kaptie</p>
+                    <q-input v-bind="$theme.input" :rules="[$rules.required('Campo requerido')]" label="Título"
+                      class="q-mb-md" v-model="state.title"></q-input>
+                    <q-input v-bind="$theme.input" type="textarea" rows="6"
+                      :rules="[$rules.required('Campo requerido')]" label="Descripción" class="q-mb-md"
+                      v-model="state.description"></q-input>
+                  </q-card-section>
+                </q-card>
+              </div>
+              <div class="col-12 col-sm-4 col-md-12" v-if="state.qr_code">
+                <div class="column">
+                  <q-btn v-bind="$theme.btn" color="primary" text-color="secondary"
+                    icon="bi-arrow-clockwise" @click="handleRegenerateQR" label="Regenerar QR"></q-btn>
+                  <q-btn v-bind="$theme.btn" class="q-mt-md" color="accent" text-color="primary" label="Abrir QR"
+                    icon="bi-box-arrow-up-right" :href="$filters.imageUrl(state.qr_code.uuid)" target="_blank"></q-btn>
+                </div>
+                <q-card class="q-mt-md" v-bind="$theme.card">
+                  <q-img class="col-12" no-spinner :src="$filters.imageUrl(state.qr_code.uuid)" />
+                </q-card>
+              </div>
             </div>
-            <q-card class="q-mt-md" v-bind="$theme.card" v-if="state.qr_code">
-                <q-img class="col-12" no-spinner :src="$filters.imageUrl(state.qr_code.uuid)" />
-            </q-card>
           </div>
-          <div class="col-12 col-md-8">
 
-          <div class="col-12">
-            <q-banner class="bg-accent border-md-radius q-mb-md" v-if="state.status == 'draft'">
-              <template v-slot:avatar>
-                <q-icon name="bi-info-circle" color="primary"></q-icon>
-              </template>
-              <span class="text-primary">El Kaptie actual aun se encuentra como borrador aun no se ecnuentra
-                publicado</span>
-            </q-banner>
-            <q-banner class="bg-accent border-md-radius q-mb-md" v-if="!state.id">
-              <template v-slot:avatar>
-                <q-icon name="bi-info-circle" color="primary"></q-icon>
-              </template>
-              <span class="text-primary">Cuando se haya guardado el kaptie generaremos tu QR</span>
-            </q-banner>
-          </div>
+          <div class="col-12 col-md-8">
+            <div class="col-12">
+              <q-banner class="bg-accent border-md-radius q-mb-md" v-if="state.status == 'draft'">
+                <template v-slot:avatar>
+                  <q-icon name="bi-info-circle" color="primary"></q-icon>
+                </template>
+                <span class="text-primary">El Kaptie actual aun se encuentra como borrador aun no se ecnuentra
+                  publicado</span>
+              </q-banner>
+              <q-banner class="bg-accent border-md-radius q-mb-md" v-if="!state.id">
+                <template v-slot:avatar>
+                  <q-icon name="bi-info-circle" color="primary"></q-icon>
+                </template>
+                <span class="text-primary">Cuando se haya guardado el kaptie generaremos tu QR</span>
+              </q-banner>
+            </div>
             <q-card v-bind="$theme.card">
               <q-card-section>
                 <p class="text-h4 text-primary q-my-none">Configuración</p>
@@ -90,7 +99,9 @@
 
 <script setup lang="ts">
 import { make } from 'src/boot/axios';
+import { theme } from 'src/boot/helpers';
 import QUploadComponent from 'src/components/QUploadComponent.vue';
+import { alert, question } from 'src/config/dialog';
 import type { IKaptie } from 'src/types/IKaptie';
 import { Kaptie } from 'src/types/IKaptie';
 import { onMounted, ref } from 'vue';
@@ -98,6 +109,8 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 const state = ref<Kaptie>(new Kaptie)
 async function onSubmit() {
+  const answer = await question('Guardar', 'El Kaptie se guardará con los datos ingresados', { type: 'info', ok: { ...theme.btn, label: 'Guardar', color: 'primary', textColor: 'secondary' } })
+  if (!answer) return
   const {
     data: {
       error,
@@ -110,7 +123,7 @@ async function onSubmit() {
   })
 
   if (error) {
-    console.log(message)
+    await alert('Error', message, { type: 'negative' })
   } else {
     await router.push('/kapties')
   }
@@ -130,9 +143,12 @@ async function getKaptie(id: string) {
     if (!error) {
       state.value = new Kaptie(data)
     } else {
-      console.log(message)
+      await alert('Error', message, { type: 'negative' })
+      void router.push('/kapties')
     }
   } catch (error) {
+    await alert('Error', 'Error al obtener el kaptie', { type: 'negative' })
+    void router.push('/kapties')
     console.log(error)
   }
 }

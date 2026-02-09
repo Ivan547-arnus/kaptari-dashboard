@@ -4,5 +4,6 @@ export type IResponse<T = unknown> = {
     reauth?: boolean
     data: T;
     total?: null | number;
+    exception?: string;
     [propName: string]: unknown;
   };

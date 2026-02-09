@@ -10,7 +10,7 @@
         Kaptie</q-btn>
     </div>
     <q-card class="bg-transparent no-shadow" style="width: 100%;">
-      <q-table-component url="/kapties" :search="search" table-header-class="comfortaa-bold" style="width: 100%;" :columns="columns"
+      <q-table-component url="/kapties" :search="search" table-header-class="text-h6" style="width: 100%;" :columns="columns"
         class="bg-transparent no-shadow">
         <template #no-data>
           <div class="no-items text-primary">
@@ -31,7 +31,7 @@
                 {{ props.row.title }}
               </div>
             </q-td>
-            <q-td key="description" :props="props" class="be-vietnam-pro-thin">
+            <q-td key="description" :props="props">
               <div>
                 {{ props.row.description }}
               </div>
@@ -43,7 +43,7 @@
                 </q-chip>
               </div>
             </q-td>
-            <q-td key="created_at" :props="props" class="be-vietnam-pro-thin">
+            <q-td key="created_at" :props="props">
               <div>
                 {{ $filters.dateTime(props.row.created_at) }}
               </div>

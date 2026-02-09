@@ -22,7 +22,7 @@ export const question = (
                 ok: {
                     ...theme.btn,
                     label: 'Aceptar',
-                    color: 'negative',
+                    color: 'primary',
                 },
                 cancel: {
                     ...theme.btn,
@@ -85,9 +85,9 @@ export const alert = (
 ): Promise<boolean> => {
     return new Promise((resolve) => {
         const iconOpts = {
-            'positive': 'o_check_circle',
-            'negative': 'o_error',
-            'info': 'o_flag',
+            'positive': 'bi-check-circle',
+            'negative': 'bi-exclamation-circle',
+            'info': 'bi-info-circle',
         }
 
         Dialog.create({
@@ -97,8 +97,9 @@ export const alert = (
                 type: 'info',
                 icon: iconOpts[config?.type || 'info'],
                 ok: {
+                    ...theme.btn,
                     label: 'Aceptar',
-                    color: 'primary',
+                    color: config?.type || 'primary',
                     class: 'full-width rounded-button',
                 },
                 cancel: false,
