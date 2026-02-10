@@ -83,10 +83,15 @@ const menu = [
     to: '/'
   },
   {
+    title: 'Usuarios',
+    icon: 'bi-people',
+    to: '/usuarios'
+  },
+  {
     title: 'Kapties',
     icon: 'bi-gear',
     to: '/kapties'
-  }
+  },
 ]
 </script>
 
