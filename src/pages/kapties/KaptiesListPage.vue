@@ -45,7 +45,7 @@
                   {{ props.row.description || 'Sin descripción' }}
                 </p>
                 <p class="text-normal text-primary q-my-none">
-                  Visitado: 0
+                  Veces escaneado: {{ props.row.views }}
                 </p>
 
                 <div class="text-caption text-grey-7">
